@@ -12,11 +12,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.BiasAlignment
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.HorizontalAlignmentLine
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,7 +46,6 @@ fun ConcertListScreen(modifier: Modifier = Modifier) {
             .fillMaxSize()
             .padding(16.dp)
     ) {
-
         Text(
             text = "Lista de Conciertos",
             style = MaterialTheme.typography.titleLarge,
@@ -57,14 +55,14 @@ fun ConcertListScreen(modifier: Modifier = Modifier) {
 
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(conciertos) { concert ->
-                ConcertRow(concert)
+                ConcertRow(concert = concert, onTriClick = {})
             }
         }
     }
 }
 
 @Composable
-fun ConcertRow(concert: Concierto, modifier: Modifier = Modifier) {
+fun ConcertRow(concert: Concierto, modifier: Modifier = Modifier, onTriClick: () -> Unit) {
     val imageResId = when (concert.imageTitle) {
         "concert_a" -> R.drawable.concert_image_1
         "concert_b" -> R.drawable.concert_image_1
@@ -73,19 +71,20 @@ fun ConcertRow(concert: Concierto, modifier: Modifier = Modifier) {
         "concert_e" -> R.drawable.concert_image_1
         else -> R.drawable.concert_image_1
     }
+
     Column(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
     ) {
-        Row {
-            Box(modifier = modifier
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
                     .padding(horizontal = 4.dp)
-
-            ){
+            ) {
                 Image(
                     painter = painterResource(id = imageResId),
-                    contentDescription = "Imagen de perfil",
+                    contentDescription = "Imagen del concierto",
                     modifier = Modifier
                         .size(32.dp)
                         .clip(CircleShape)
@@ -93,51 +92,45 @@ fun ConcertRow(concert: Concierto, modifier: Modifier = Modifier) {
                     contentScale = ContentScale.Crop
                 )
             }
-            Box(modifier = Modifier
-                    .padding(vertical = 4.dp)
-            ){
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 8.dp)
+            ) {
                 Text(
                     text = concert.title,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
             }
-
-
-
-        }
-        Row (modifier = Modifier
-            .padding(horizontal = 34.dp)
-            .padding(vertical = 4.dp)
-
-            ){
-            Box(modifier = Modifier
-                    .padding(horizontal = 8.dp)
-            ){
-                Text(
-                    text = concert.date,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+            IconButton(onClick = onTriClick) {
+                Image(
+                    painter = painterResource(id = R.drawable.triangle),
+                    contentDescription = "Botón de triángulo",
+                    modifier = Modifier.size(24.dp)
                 )
             }
-            Box(modifier = Modifier
-                .padding(horizontal = 16.dp)
-            ){
-                Text(
-                    text = concert.location,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-
         }
 
-
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 4.dp, vertical = 4.dp)
+        ) {
+            Text(
+                text = concert.date,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(
+                text = concert.location,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
     }
     Divider(modifier = Modifier.padding(vertical = 8.dp))
 }
-
-
 
 @Preview(showBackground = true)
 @Composable

@@ -57,15 +57,34 @@ class ConcertInfoActivity : ComponentActivity() {
 fun ConcertInfoScreen(modifier: Modifier = Modifier) {
     val concertsList = remember { mutableStateListOf(*conciertos.toTypedArray()) }
 
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
+    Row {
+        Text(
+            text = "TodoEventos",
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+
+
+
+            )
+        Divider(modifier = Modifier.padding(vertical = 30.dp))
+
+
+    }
+
+
+    LazyColumn(modifier = Modifier.fillMaxSize()
+        .padding(20.dp)
+    ) {
         // Sección de Favoritos
         item {
             Text(
+
                 text = "Favoritos",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(16.dp)
             )
+
         }
         val favoriteConcerts = concertsList.filter { it.isFavorite }
         itemsIndexed(favoriteConcerts.chunked(2)) { _, pair ->
